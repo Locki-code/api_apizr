@@ -9,6 +9,7 @@ require('dotenv/config');
 app.use(cors());
 app.use(bodyParser.json());
 
+// Permet d'obtenir la totalité des données
 app.get('/', async (req, res) => {
     try{
         const plage = await Plage.find();
@@ -18,6 +19,7 @@ app.get('/', async (req, res) => {
     }
 });
 
+// Permet d'obtenir les données d'une ville grâce au nom de celle ci
 app.get('/:name', async (req, res) => {
     try{
         const plage = await Plage.find({name: req.params.name });
@@ -27,6 +29,7 @@ app.get('/:name', async (req, res) => {
     }
 });
 
+// Permet d'ajouter une ville dans la base de données
 app.post('/', async (req,res)=>{
     const post = new Plage({
         name: req.body.name,
@@ -40,6 +43,7 @@ app.post('/', async (req,res)=>{
     }
 });
 
+// Permet de supprimer une ville grâce au nom de celle ci
 app.delete('/:name', async (req,res) => {
     try{
         const removedPost = await Plage.remove({name: req.params.name});
@@ -49,11 +53,12 @@ app.delete('/:name', async (req,res) => {
     }
 });
 
+// Permet de mettre à jour les valeurs concernant une ville grâce à son nom
 app.patch('/:name', async (req,res) => {
     try{
         const updatedPost = await Plage.updateOne(
             { name: req.params.name },
-            { $set: { quality: req.body.quality } }
+            { $set: { quality: req.body.quality } } // /!\ A améliorer /!\ Changer la date lor de la mise à jour
         );
         res.json(updatedPost);
     }catch(err){
